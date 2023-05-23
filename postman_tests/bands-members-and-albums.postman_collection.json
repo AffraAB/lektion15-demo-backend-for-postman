@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "04892015-c67f-415e-aebe-2a72f3e20925",
+		"name": "bands-members-and-albums",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all bands",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Expect response code to be 200', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/bands",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"bands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single band",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"//console.log(response);\r",
+							"\r",
+							"pm.test('See that the first band is Metallica', () => {\r",
+							"    pm.expect(response.name).to.equal('Metallica');\r",
+							"});\r",
+							"\r",
+							"pm.test('Expect response code to be 200', () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/bands/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"bands",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a band",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Verify status code', () => {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"pm.test('See changes', () => {\r",
+							"    pm.expect(pm.response.json().changes).to.equal(1);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"idToChange\", pm.response.json().lastInsertRowid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Bobs Burgers\",\r\n    \"genre\": \"Pop\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/bands",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"bands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change last inserted band",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Expect changes to take', () => {\r",
+							"    pm.expect(pm.response.json().lastInsertRowid).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"pm.test('Status code 200 OK', () => {\r",
+							"    pm.expect(pm.response).to.have.status(200);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"The Smiths\",\r\n    \"genre\": \"Rock\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/bands/{{idToChange}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"bands",
+						"{{idToChange}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a band",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Check status code 200 OK', () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Check that the band does not exist', () => {\r",
+							"    pm.expect(pm.response.json().changes).to.equal(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/bands/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"bands",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all bands again",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Expect response code to be 200', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"console.log(pm.response.json());\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/bands",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"bands"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
